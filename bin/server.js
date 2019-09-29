@@ -1,7 +1,6 @@
-const app = require('../src/app');
 const debug = require('debug')('balta:server');
 const http = require('http');
-
+const app = require('../src/app');
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 

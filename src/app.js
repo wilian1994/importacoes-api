@@ -10,6 +10,7 @@ const uri = "mongodb+srv://admin:admin@cluster0-vyiiw.mongodb.net/importacoes?re
 //Initing mongoose
 mongoose.connect(uri,  { useNewUrlParser: true })
 
+const Product = require('./models/product');
 
 const indexRoute = require('./routes/index-route')
 const productRoute = require('./routes/products-route')
