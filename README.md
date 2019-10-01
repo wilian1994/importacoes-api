@@ -1,4 +1,4 @@
 # importacoes-api
 Modulo 2
-Aula 07
-Finalizar os exercicios
+Aula 12
+Relializar os exercicios

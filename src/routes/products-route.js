@@ -11,5 +11,7 @@ router.delete('/', productController.delete);
 
 router.put('/:id', productController.put);
 
+router.get('/', productController.get);
+
 
 module.exports = router;

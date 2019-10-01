@@ -17,8 +17,30 @@ exports.post = (req, res, next) => {
                 data: e
             })
         });
-    res.status(200).send(req.body);
 }
+
+exports.get = (req, res, next) => {
+    Product.find({active: true}, 'title price slug')
+        .then(products => {
+            res.status(200).send(products)
+        })
+        .catch(e => res.status(400).send(e))
+}
+
+exports.getById = (req, res, next) => {
+    Product.findById({slug: req.params.slug}, 'title price slug')
+        .then(products => {
+            res.status(200).send(products)
+        })
+        .catch(e => res.status(400).send(e))
+}
+
+exports.getBySlug = (req, res, next) => {
+    Product.findOne({slug: req.params.slug, active: true}, title, slug)
+        .then(result => res.status(200).send(result))
+        .catch(e => res.status(400).send(e));
+}
+
 exports.delete = (req, res, next) => {
     res.status(200).send(req.body);
 }
