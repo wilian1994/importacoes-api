@@ -42,13 +42,34 @@ exports.getBySlug = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
-    res.status(200).send(req.body);
+    Product.findOneAndRemove(req.params.id)
+        .then(e => {
+            res.status(201).send({
+                message: "Produto removido com sucesso"
+            })
+        })
+        .catch(e => {
+            res.status(400).send({
+                message: "Falha ao remover produto", e
+            }) 
+        })
 }
 
 exports.put = (req, res, next) => {
     const id = req.params.id;
-    res.status(200).send({
-        id: id,
-        item: req.body
-    });
+    Product.findByIdAndUpdate(id, {
+        $set: {
+            title: req.body.title,
+            description: req.body.description,
+            price: req.body.price
+        }
+    }).then(e => {
+        res.status(201).send({
+            message: "Produto atualizado com sucesso"
+        })
+    }).catch(e => {
+        res.status(400).send({
+            message: "Falha ao atualizar o produto"
+        })
+    })
 };

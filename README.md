@@ -1,4 +1,4 @@
 # importacoes-api
 Modulo 2
-Aula 12
-Relializar os exercicios
+Aula 13
+Começando a aula de validação
