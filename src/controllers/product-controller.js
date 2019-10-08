@@ -1,11 +1,11 @@
 'use strict'
 const mongoose = require('mongoose');
 const Product = mongoose.model('Product');
+const repository = require('../repositories/product-repository')
 
 exports.post = (req, res, next) => {
-    var product = new Product(req.body);
-    product
-        .save()
+    repository
+        .create(req.body)
         .then(x => {
             res.status(201).send({
                 message: 'Produto cadastrado com sucesso'
@@ -19,16 +19,19 @@ exports.post = (req, res, next) => {
         });
 }
 
-exports.get = (req, res, next) => {
-    Product.find({active: true}, 'title price slug')
-        .then(products => {
-            res.status(200).send(products)
+exports.get = async (req, res, next) => {
+    try {
+        var data = await repository.get();
+        res.status(200).send(data)
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao processar a requisição'
         })
-        .catch(e => res.status(400).send(e))
+    }
 }
-
 exports.getById = (req, res, next) => {
-    Product.findById({slug: req.params.slug}, 'title price slug')
+    repository
+        .getById(req.params.id)
         .then(products => {
             res.status(200).send(products)
         })
@@ -36,13 +39,15 @@ exports.getById = (req, res, next) => {
 }
 
 exports.getBySlug = (req, res, next) => {
-    Product.findOne({slug: req.params.slug, active: true}, title, slug)
+    repository
+        .getBySlug(req.params.slug)
         .then(result => res.status(200).send(result))
         .catch(e => res.status(400).send(e));
 }
 
 exports.delete = (req, res, next) => {
-    Product.findOneAndRemove(req.params.id)
+    repository
+        .delete(req.params.id)
         .then(e => {
             res.status(201).send({
                 message: "Produto removido com sucesso"
@@ -57,19 +62,17 @@ exports.delete = (req, res, next) => {
 
 exports.put = (req, res, next) => {
     const id = req.params.id;
-    Product.findByIdAndUpdate(id, {
-        $set: {
-            title: req.body.title,
-            description: req.body.description,
-            price: req.body.price
-        }
-    }).then(e => {
-        res.status(201).send({
-            message: "Produto atualizado com sucesso"
+    repository
+        .update(id, req.body)
+        .then(e => {
+            res.status(201).send({
+                message: "Produto atualizado com sucesso"
+            })
+        }).catch(e => {
+            res.status(400).send({
+                message: "Falha ao atualizar o produto"
+            })
         })
-    }).catch(e => {
-        res.status(400).send({
-            message: "Falha ao atualizar o produto"
-        })
-    })
 };
+
+
